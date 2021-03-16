@@ -15,6 +15,9 @@ class CreateOptionColsTable extends Migration
     {
         Schema::create('option_cols', function (Blueprint $table) {
             $table->id();
+
+            $table->text('opcion');     //texto de la opcion
+
             $table->timestamps();
         });
     }

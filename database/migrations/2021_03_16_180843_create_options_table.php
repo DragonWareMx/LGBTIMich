@@ -15,6 +15,10 @@ class CreateOptionsTable extends Migration
     {
         Schema::create('options', function (Blueprint $table) {
             $table->id();
+
+            $table->text('opcion');     //texto de la opcion
+            $table->boolean('esextra')->default(false); //se le permite al usuario contestar lo que sea en una pregunta de opcion multiple
+            
             $table->timestamps();
         });
     }

@@ -17,7 +17,7 @@ class CreateQuestionsTable extends Migration
             $table->id();
 
             $table->text('pregunta');   //pregunta
-            $table->enum('tipo', ['abierta', 'multiple','tabla']);
+            $table->enum('tipo', ['abierta', 'multiple','select','tabla']);  //tipo de pregunta, abierta, opcion multiple, tabla
 
             $table->timestamps();
         });

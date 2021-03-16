@@ -15,6 +15,9 @@ class CreateAnswersTable extends Migration
     {
         Schema::create('answers', function (Blueprint $table) {
             $table->id();
+
+            $table->text('respuesta')->nullable();      //respuesta abierta del usuario, en caso de pregunta ABIERTA
+
             $table->timestamps();
         });
     }
