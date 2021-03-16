@@ -17,6 +17,21 @@ class CreateAnswersTable extends Migration
             $table->id();
 
             $table->text('respuesta')->nullable();      //respuesta abierta del usuario, en caso de pregunta ABIERTA
+            
+            $table->foreignId('question_id')->constrained()
+                                        ->onUpdate('cascade')
+                                        ->onDelete('cascade');
+            $table->foreignId('option_id')->nullable()
+                                        ->constrained()
+                                        ->onUpdate('cascade')
+                                        ->onDelete('cascade');
+            $table->foreignId('option_col_id')->nullable()
+                                        ->constrained()
+                                        ->onUpdate('cascade')
+                                        ->onDelete('cascade');
+            $table->foreignId('answerer_id')->constrained()
+                                        ->onUpdate('cascade')
+                                        ->onDelete('cascade');
 
             $table->timestamps();
         });

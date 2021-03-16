@@ -17,6 +17,10 @@ class CreateOptionColsTable extends Migration
             $table->id();
 
             $table->text('opcion');     //texto de la opcion
+            
+            $table->foreignId('question_id')->constrained()
+                                        ->onUpdate('cascade')
+                                        ->onDelete('cascade');
 
             $table->timestamps();
         });

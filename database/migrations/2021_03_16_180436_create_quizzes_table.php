@@ -16,8 +16,8 @@ class CreateQuizzesTable extends Migration
         Schema::create('quizzes', function (Blueprint $table) {
             $table->id();
 
-            $table->text('name');   //nombre de la encuesta
-            
+            $table->text('name')->unique();   //nombre de la encuesta
+
             $table->timestamps();
         });
     }

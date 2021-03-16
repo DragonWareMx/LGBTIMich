@@ -18,6 +18,10 @@ class CreateSectionsTable extends Migration
 
             $table->text('name');   //nombre de la encuesta
             
+            $table->foreignId('quiz_id')->constrained()
+                                        ->onUpdate('cascade')
+                                        ->onDelete('cascade');
+
             $table->timestamps();
         });
     }
