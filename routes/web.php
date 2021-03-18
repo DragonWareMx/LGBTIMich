@@ -20,3 +20,7 @@ Route::get('/', function () {
 Route::get('test', function () {
     return view('layouts.main');
 });
+
+Route::get('encuesta', function () {
+    return view('encuesta');
+});
