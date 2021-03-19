@@ -24,3 +24,8 @@ Route::get('test', function () {
 Route::get('encuesta', function () {
     return view('encuesta');
 });
+
+// GESTOR---------------------------------------------------------------
+Route::get('dashboard', function () {
+    return view('layouts.dashboard');
+});
