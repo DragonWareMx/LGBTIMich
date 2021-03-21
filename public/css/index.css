@@ -1,0 +1,37 @@
+.navbar-desk{
+    height: 109px;
+    background-color: #FFFFFF !important;
+    border: 1px solid #E4E4E4;
+    box-sizing: border-box;
+    padding: 0 2rem 0 0.5rem;
+}
+
+.uk-navbar-nav{
+    font-family: Montserrat;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 25px;
+    letter-spacing: 0em;
+    text-align: center;
+    color: #666968;
+}
+
+.uk-navbar-nav li{
+    margin: 0 10px;
+}
+
+footer{
+    min-height: 221px;
+    background-color: #333333;
+    border: 2px solid #333333;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 400;
+    letter-spacing: 0em;
+}
+
+.texto-footer{
+    color: #FFFFFF;
+    font-size: 14px;
+}
