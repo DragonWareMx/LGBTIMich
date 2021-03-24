@@ -16,7 +16,7 @@
 				<nav class="uk-navbar uk-light" data-uk-navbar="mode:click; duration: 250">
 					<div class="uk-navbar-left">
 						<div class="uk-navbar-item uk-hidden@m">
-							<a class="uk-logo" href="#"><img class="custom-logo" src="img/dashboard-logo-white.svg" alt=""></a>
+							<a class="uk-logo" href="#"><img class="custom-logo" src="{{asset('/img/logos/lgbtiMICH_gestor_white.png')}}" alt=""></a>
 						</div>
 						<ul class="uk-navbar-nav uk-visible@m">
 							<li>
@@ -54,8 +54,8 @@
 		<!--/HEADER-->
 		<!-- LEFT BAR -->
 		<aside id="left-col" class="uk-light uk-visible@m">
-			<div class="left-logo uk-flex uk-flex-middle">
-				<img class="custom-logo" src="{{asset('/img/logos/lgbtiMICH.png')}}" alt="">
+			<div class="left-logo uk-flex uk-flex-middle uk-flex-center">
+				<img class="custom-logo" src="{{asset('/img/logos/lgbtiMICH_gestor.png')}}" alt="">
 			</div>
 			<div class="left-content-box  content-box-dark">
 				<img src="{{asset('/img/icons/unnamed.png')}}" alt="" class="uk-border-circle profile-img">
@@ -121,7 +121,7 @@
 						<span class="uk-text-small"><span data-uk-icon="icon: plus-circle" class="uk-margin-small-right uk-text-primary"></span>Nuevas entradas</span>
 						<h1 class="uk-heading-primary uk-margin-remove  uk-text-primary">25</h1>
 						<div class="uk-text-small">
-							<span class="uk-text-success" data-uk-icon="icon: triangle-up">15%</span> más que la última semana.
+							<span class="uk-text-success" data-uk-icon="icon: triangle-up">15%</span> Más que la última semana.
 						</div>
 					</div>
 					
