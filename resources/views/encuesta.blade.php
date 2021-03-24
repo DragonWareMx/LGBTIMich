@@ -73,6 +73,50 @@
                         <label class="uk-width-1"><input class="uk-radio" type="radio" name="radio1">No tenía dinero</label>
                     </div>
                 </div>
+                {{-- Pregunta tipo tabla --}}
+                <div class="uk-width-1 uk-margin-small-bottom uk-margin-small-top">
+                    <div class="uk-width-1 uk-text-secondary uk-text-bold">9. ¿A quien acudió y cual fue el resultado?</div>
+                    <div class="uk-overflow-auto">
+                        <table class="uk-table uk-table-small uk-table-divider uk-table-middle">
+                            <thead>
+                                <tr>
+                                    <th class="uk-width-small"></th>
+                                    <th class="uk-width-small">Fue informativo y útil</th>
+                                    <th class="uk-width-small">No podía ofrecerme todo lo que necesitaba</th>
+                                    <th class="uk-width-small">Quería ayudar pero yo no di mi consentimiento para el tratamiento propuesto</th>
+                                    <th class="uk-width-small">Se negó a ayudarme</th>
+                                    <th class="uk-width-small">Trató de convencerme de que no soy trans</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Organizaciones de la sociedad civil</td>
+                                    <td><input class="uk-radio" type="radio" name="tableId1"></td>
+                                    <td><input class="uk-radio" type="radio" name="tableId1"></td>
+                                    <td><input class="uk-radio" type="radio" name="tableId1"></td>
+                                    <td><input class="uk-radio" type="radio" name="tableId1"></td>
+                                    <td><input class="uk-radio" type="radio" name="tableId1"></td>
+                                </tr>
+                                <tr>
+                                    <td>Organizaciones de la sociedad civil</td>
+                                    <td><input class="uk-radio" type="radio" name="tableId1"></td>
+                                    <td><input class="uk-radio" type="radio" name="tableId1"></td>
+                                    <td><input class="uk-radio" type="radio" name="tableId1"></td>
+                                    <td><input class="uk-radio" type="radio" name="tableId1"></td>
+                                    <td><input class="uk-radio" type="radio" name="tableId1"></td>
+                                </tr>
+                                <tr>
+                                    <td>Organizaciones de la sociedad civil</td>
+                                    <td><input class="uk-radio" type="radio" name="tableId1"></td>
+                                    <td><input class="uk-radio" type="radio" name="tableId1"></td>
+                                    <td><input class="uk-radio" type="radio" name="tableId1"></td>
+                                    <td><input class="uk-radio" type="radio" name="tableId1"></td>
+                                    <td><input class="uk-radio" type="radio" name="tableId1"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
             <div class="uk-width-1 uk-margin-small-top uk-flex uk-flex-right">
                 <button type="submit" class="enc_submit">Guardar</button>
