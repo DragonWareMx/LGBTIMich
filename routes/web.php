@@ -26,6 +26,9 @@ Route::get('encuesta', function () {
 });
 
 // GESTOR---------------------------------------------------------------
+Route::get('login', function () {
+    return view('gestor.login');
+});
 Route::get('dashboard', function () {
     return view('layouts.dashboard');
 });
