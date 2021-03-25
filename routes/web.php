@@ -21,9 +21,9 @@ Route::get('test', function () {
     return view('layouts.main');
 });
 
-Route::get('encuesta', function () {
-    return view('encuesta');
-});
+
+// ENCUESTA---------------------------------------------------------------
+Route::get('/encuesta/{nombre}', 'QuizController@index');
 
 // GESTOR---------------------------------------------------------------
 Route::get('login', function () {
