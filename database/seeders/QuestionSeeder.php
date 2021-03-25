@@ -13,6 +13,10 @@ class QuestionSeeder extends Seeder
      */
     public function run()
     {
-        //
+        \DB::table('questions')->insert([
+            'pregunta' => 'Edad',
+            'tipo' =>'abierta',
+            'section_id'=>1
+        ]);
     }
 }

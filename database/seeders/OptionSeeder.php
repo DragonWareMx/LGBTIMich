@@ -13,6 +13,12 @@ class OptionSeeder extends Seeder
      */
     public function run()
     {
-        //
+        \DB::table('options')->insert([
+            'opcion' => 18,
+            'tipo' =>'num',
+            'minimo' =>'14',
+            'maximo' =>'90',
+            'question_id'=>1
+        ]);
     }
 }

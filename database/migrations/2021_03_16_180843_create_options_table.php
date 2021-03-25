@@ -16,8 +16,11 @@ class CreateOptionsTable extends Migration
         Schema::create('options', function (Blueprint $table) {
             $table->id();
 
-            $table->text('opcion');     //texto de la opcion
+            $table->text('opcion')->nullable();     //texto de la opcion
             $table->boolean('esextra')->default(false); //se le permite al usuario contestar lo que sea en una pregunta de opcion multiple
+            $table->enum('tipo', ['num', 'alfa'])->nullable();      //tipo de respuesta, numerico o alfanumerico
+            $table->integer('minimo')->nullable();
+            $table->integer('maximo')->nullable();
             
             $table->foreignId('question_id')->constrained()
                                         ->onUpdate('cascade')

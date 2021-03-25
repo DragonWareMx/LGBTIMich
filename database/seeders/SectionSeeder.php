@@ -13,6 +13,9 @@ class SectionSeeder extends Seeder
      */
     public function run()
     {
-        //
+        \DB::table('sections')->insert([
+            'name' => 'Datos Sociodemográficos',
+            'quiz_id' => 1
+        ]);
     }
 }
