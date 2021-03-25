@@ -142,7 +142,7 @@
                 </select>
             </div>
         </div>
-        <div class="uk-width-1 uk-margin-small-top uk-flex uk-flex-right">
+        <div class="uk-width-1 uk-margin-small-top uk-flex uk-flex-right uk-margin-bottom">
             <button type="submit" class="enc_submit">Guardar</button>
         </div>
     </form>

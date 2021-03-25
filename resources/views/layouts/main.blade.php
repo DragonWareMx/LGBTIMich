@@ -104,7 +104,7 @@
                 <a href="http://www.dragonware.com.mx" target="_blank"
                     class="texto-footer uk-flex uk-flex-left@m uk-flex-center uk-flex-middle uk-margin-small-top"
                     style="text-decoration: none; color:#FFFFFF; width:100%; height:25px">
-                    <div class="uk-flex uk-flex-middle">
+                    <div class="uk-flex uk-flex-middle" style="font-size: 13px">
                         Desarrollado por DragonWare.
                         <img style="margin-left: 5px" src="{{ asset('img/logos/dragonBlanco.png') }}" width="23px"
                             height="16px">
