@@ -6,6 +6,18 @@
     padding: 0 2rem 0 0.5rem;
 }
 
+.hide{
+    display: none;
+}
+
+.navbar-phone{
+    height: 65px;
+    background-color: #FFFFFF !important;
+    border: 1px solid #E4E4E4;
+    box-sizing: border-box;
+    padding: 0 0.4rem 0 0.5rem;
+}
+
 .uk-navbar-nav{
     font-family: Montserrat;
     font-size: 16px;
@@ -13,7 +25,6 @@
     font-weight: 500;
     line-height: 25px;
     letter-spacing: 0em;
-    text-align: center;
     color: #666968;
 }
 
@@ -34,4 +45,29 @@ footer{
 .texto-footer{
     color: #FFFFFF;
     font-size: 14px;
+}
+
+.texto-titulo{
+    font-family: Montserrat;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 40px;
+    letter-spacing: 0em;
+    color: #FFFFFF;
+
+    margin-top: 0px;
+}
+
+.texto-left{
+    font-family: Montserrat;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 40px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #FFFFFF;
+
+    margin-top: 0px;
 }

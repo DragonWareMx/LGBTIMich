@@ -14,6 +14,9 @@
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.6.18/dist/js/uikit.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.6.18/dist/js/uikit-icons.min.js"></script>
 
+    <!--FONT AWESOME-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <link rel="stylesheet" href="{{ asset('/css/index.css') }}" />
 
     <!-- Fuentes -->
@@ -21,10 +24,16 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
         rel="stylesheet">
+
+    <!-- Javascript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{{ asset('js/menu.js') }}"></script>
+    @yield('head')
 </head>
 
 <body>
-    <div uk-sticky="sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky; bottom: #transparent-sticky-navbar">
+    <div class="menu-desktop"
+        uk-sticky="sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky; bottom: #transparent-sticky-navbar">
         <nav class="uk-navbar-container navbar-desk" uk-navbar style="position: relative; z-index: 980;">
             <div class="uk-navbar-left">
                 <a class="uk-navbar-item uk-logo" href="#">
@@ -46,14 +55,52 @@
             </div>
         </nav>
     </div>
-    <div style="height: 30px;width:30px;background-color:green">
+
+    <div class="menu-phone"
+        uk-sticky="sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky; bottom: #transparent-sticky-navbar">
+        <nav class="uk-navbar-container navbar-phone" uk-navbar style="position: relative; z-index: 980;">
+            <div class="uk-navbar-left">
+                {{-- <a class="" href="#">
+                    <img src="{{ asset('/img/icons/menu.png') }}" alt="" width="23px">
+                </a> --}}
+                <button class="" type="button"
+                    style="background-color: transparent; border:none; outline:none;width:30px;height:30px">
+                    <img src="{{ asset('/img/icons/menu.png') }}" alt="" width="23px">
+                </button>
+                <div uk-dropdown="mode:click">
+                    <ul class="uk-nav uk-dropdown-nav">
+                        <li class="uk-active"><a href="#">Active</a></li>
+                        <li><a href="#">Item</a></li>
+                        <li class="uk-nav-header">Header</li>
+                        <li><a href="#">Item</a></li>
+                        <li><a href="#">Item</a></li>
+                        <li class="uk-nav-divider"></li>
+                        <li><a href="#">Item</a></li>
+                    </ul>
+                </div>
+                <a class="" href="#">
+                    <img src="{{ asset('/img/logos/lgbtiMICH.png') }}" alt="" width="117px">
+                </a>
+            </div>
+            <div class="uk-navbar-right">
+                <a class=" uk-margin-left" href="#">
+                    <img src="{{ asset('/img/logos/Michoacan.png') }}" alt="" width="58.47px">
+                </a>
+                <a class="" href="#">
+                    <img src="{{ asset('/img/logos/Michoacan_se_escucha.png') }}" alt="" width="81.17px">
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    @yield('content')
 
     </div>
     <footer class="main-footer uk-grid-colapse uk-grid-match uk-child-width-expand@m uk-text-center uk-flex-wrap"
         uk-grid>
         <div>
-            <div class="uk-padding-small uk-flex uk-flex-left@m uk-flex-center uk-flex-wrap uk-flex-top">
-                <a class="" href="/inicio" style="height: 70px">
+            <div class="uk-padding-small">
+                <a class="uk-flex uk-flex-left@m uk-flex-center uk-flex-middle" href="/inicio" style="height: 70px;">
                     <img src="{{ asset('img/logos/lgbtiMICH-white.png') }}" width="149px">
                 </a>
                 <div class="texto-footer uk-margin-small-top uk-flex uk-flex-left@m uk-flex-center uk-flex-middle"
@@ -62,41 +109,48 @@
                 <a href="http://www.dragonware.com.mx" target="_blank"
                     class="texto-footer uk-flex uk-flex-left@m uk-flex-center uk-flex-middle uk-margin-small-top"
                     style="text-decoration: none; color:#FFFFFF; width:100%; height:25px">
-                    <div class="texto-dragonware uk-flex uk-flex-middle">
+                    <div class="uk-flex uk-flex-middle">
                         Desarrollado por DragonWare.
+                        <img style="margin-left: 5px" src="{{ asset('img/logos/dragonBlanco.png') }}" width="23px"
+                            height="16px">
                     </div>
                 </a>
             </div>
         </div>
         <div>
-            <div class="uk-padding-small uk-light uk-flex uk-flex-center uk-flex-wrap">
-                <div class="uk-width-3-5 uk-flex-between uk-flex">
-                    <a href="https://twitter.com/ZEscenica?s=09" target="_blank"><i class="fa fa-twitter fa-2x"></i></a>
-                    <a href="https://www.facebook.com/zinnia.comp.escenica/" target="_blank"><i
-                            class="fa fa-facebook fa-2x"></i></a>
-                    <a href="https://www.instagram.com/zinniacompania/" target="_blank"><i
-                            class="fa fa-instagram fa-2x"></i></a>
-                    <a href="mailto:zinnia.escenica@gmail.com"><i class="fa fa-envelope fa-2x"></i></a>
+            <div class="uk-padding-small uk-light uk-flex uk-flex-left@m uk-flex-center uk-flex-wrap ">
+                <div class="texto-titulo ">MÁS INFORMACIÓN</div>
+                <div class="texto-left  ">Aviso de confidencialidad</div>
+                <div class="texto-left  ">Términos y condiciones</div>
+                <div class="texto-titulo uk-width-1-1 uk-flex uk-flex-left@m uk-flex-center">SÍGUENOS</div>
+                <div class="uk-width-1-1 uk-flex uk-flex-left@m uk-flex-center">
+                    <div class="uk-width-3-5 uk-flex uk-flex-between">
+                        <a href="https://www.facebook.com/zinnia.comp.escenica/" target="_blank"><i
+                                class="fa fa-facebook fa-2x"></i></a>
+                        <a href="https://twitter.com/ZEscenica?s=09" target="_blank"><i
+                                class="fa fa-twitter fa-2x"></i></a>
+                        <a href="https://www.instagram.com/zinniacompania/" target="_blank"><i
+                                class="fa fa-youtube fa-2x"></i></a>
+                    </div>
                 </div>
-                <div class="texto-center uk-margin-small-top">Mujeres y madres en la escena Michoacana.</div>
-                <div class="texto-center  uk-margin-small-top">Copyright © 2021 Zinnia.</div>
             </div>
         </div>
         <div>
-            logo
+            <div>
+                <img src="{{ asset('/img/icons/image.png') }}" alt="" width="81px" height="81px">
+                LOGOS ADICIONALES
+            </div>
         </div>
         <div>
-            logo
+            <div>
+                <img src="{{ asset('/img/icons/image.png') }}" alt="" width="81px" height="81px">
+                LOGOS ADICIONALES
+            </div>
         </div>
         <div>
             <div class="uk-padding-small uk-light uk-flex uk-flex-middle uk-flex-right@m uk-flex-center uk-flex-wrap">
-                <div class="texto-center uk-margin-small-top"
-                    style="font-size: 16px;font-style: italic; color: #D2D2D2">
-                    "Esta página
-                    web es apoyada
-                    por
-                    el Sistema de Apoyos
-                    a la Creación y Proyectos Culturales (Fonca)"</div>
+                <img src="{{ asset('/img/logos/mich-W.png') }}" alt="" srcset="">
+                <img src="{{ asset('/img/logos/SEID-W.png') }}" alt="" srcset="">
             </div>
         </div>
     </footer>
