@@ -7,6 +7,15 @@
 
 @section('content')
 <div class="uk-container uk-container-xlarge">
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <div class="enc_title uk-width-1 uk-text-center uk-margin-large-top">Encuesta {{ $encuesta->name }}</div>
     <div class="uk-text-secondary uk-margin-top uk-width-1 uk-text-justify"
         style="font-family: Montserrat;font-style: normal;">El presente instrumento tiene el objetivo de…. . Por
@@ -36,18 +45,27 @@
         @endphp
         @endforeach
     </ul>
+
+    @php
+        $contador = 1;
+    @endphp
+
     <form action="{{route('guardarEncuesta',['nombre'=>$encuesta->name]) }}" class="uk-width-1" method="POST">
         @csrf
         <div class="enc_encuesta">
             @foreach ($encuesta->sections[0]->questions as $question)
             @switch($question->tipo)
 
-            {{-- YA QUEDÓ --}}
             @case('abierta')
                 {{-- Pregunta tipo select --}}
                 <div class="uk-width-1-3@m uk-width-1 uk-margin-small-bottom uk-margin-small-top">
-                    <div class="uk-width-1 uk-text-secondary uk-text-bold">1. {{$question->pregunta}}</div>
+                    <div class="uk-width-1 uk-text-secondary uk-text-bold">{{$contador}}. {{$question->pregunta}} @if (!$question->required)
+                        (opcional)
+                    @endif</div>
                     <input name="input[{{$question->id}}]" class="uk-input uk-margin-small-top" 
+                    @if ($question->required)
+                        required
+                    @endif
                     @if ($question->options[0]->tipo == 'num')
                         type="number"
 
@@ -73,28 +91,38 @@
                 </div>
             @break
 
-            {{-- YA QUEDÓ --}}
             @case('multiple')
             {{-- Pregunta tipo radio --}}
             <div class="uk-width-1 uk-margin-small-bottom uk-margin-small-top">
-                <div class="uk-width-1 uk-text-secondary uk-text-bold">1. {{$question->pregunta}} Elige
-                    solo una respuesta</div>
+                <div class="uk-width-1 uk-text-secondary uk-text-bold">{{$contador}}. {{$question->pregunta}} @if (!$question->required)
+                    (opcional)
+                @else
+                    Elige solo una respuesta
+                @endif</div>
                 <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
                     @foreach ($question->options as $option)
-                        <label class="uk-width-1"><input class="uk-radio" type="radio" name="radio[{{$question->id}}]" value="{{$option->id}}">{{$option->opcion}}</label>
+                        <label class="uk-width-1"><input class="uk-radio" type="radio" name="radio[{{$question->id}}]" value="{{$option->id}}"
+                            @if ($question->required)
+                                required
+                            @endif
+                            >{{$option->opcion}}</label>
                     @endforeach
                 </div>
             </div>
             @break
 
-            {{-- YA QUEDÓ --}}
             @case('select')
             {{-- Pregunta tipo select --}}
             <div class="uk-width-1-3@m uk-width-1 uk-margin-small-bottom uk-margin-small-top">
-                <div class="uk-width-1 uk-text-secondary uk-text-bold">1. {{$question->pregunta}}</div>
-                <select name="select[{{$question->id}}]" class="uk-select uk-margin-small-top">
+                <div class="uk-width-1 uk-text-secondary uk-text-bold">{{$contador}}. {{$question->pregunta}} @if (!$question->required)
+                    (opcional)
+                @endif</div>
+                <select name="select[{{$question->id}}]" class="uk-select uk-margin-small-top"
+                @if ($question->required)
+                    required
+                @endif>
+                    <option value="" selected disabled hidden > Seleccionar </option>
                     @foreach ($question->options as $option)
-                        <option value="" selected disabled hidden > Seleccionar </option>
                         <option value="{{$option->id}}">{{$option->opcion}}</option>  
                     @endforeach
                 </select>
@@ -104,7 +132,9 @@
             @case('tabla')
             {{-- Pregunta tipo tabla --}}
             <div class="uk-width-1 uk-margin-small-bottom uk-margin-small-top">
-                <div class="uk-width-1 uk-text-secondary uk-text-bold">1. {{$question->pregunta}}</div>
+                <div class="uk-width-1 uk-text-secondary uk-text-bold">{{$contador}}. {{$question->pregunta}} @if (!$question->required)
+                    (opcional)
+                @endif</div>
                 <div class="uk-overflow-auto">
                     <table class="uk-table uk-table-small uk-table-divider uk-table-middle">
                         <thead>
@@ -120,7 +150,11 @@
                             <tr>
                                 <td>{{$option->opcion}}</td>
                                 @foreach ($question->optionCols as $optionCol)
-                                <td><input class="uk-radio" type="radio" name="table[{{$question->id}}][{{$option->id}}]" value="{{$optionCol->id}}"></td>
+                                <td><input class="uk-radio" type="radio" name="table[{{$question->id}}][{{$option->id}}]" value="{{$optionCol->id}}"
+                                    @if ($question->required)
+                                        required
+                                    @endif>
+                                </td>
                                 @endforeach
                             </tr>
                             @endforeach
@@ -133,6 +167,9 @@
             @default
 
             @endswitch
+            @php
+                $contador++;
+            @endphp
             @endforeach
         <div class="uk-width-1 uk-margin-small-top uk-flex uk-flex-right uk-margin-bottom">
             <button type="submit" class="enc_submit">Guardar</button>

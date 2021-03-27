@@ -18,6 +18,7 @@ class CreateQuestionsTable extends Migration
 
             $table->text('pregunta');   //pregunta
             $table->enum('tipo', ['abierta', 'multiple','select','tabla']);  //tipo de pregunta, abierta, opcion multiple, tabla
+            $table->boolean('required')->default(1);
             
             $table->foreignId('section_id')->constrained()
                                         ->onUpdate('cascade')
