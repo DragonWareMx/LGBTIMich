@@ -25,6 +25,9 @@ Route::get('test', function () {
 // ENCUESTA---------------------------------------------------------------
 Route::get('/encuesta/{nombre}', 'QuizController@index');
 
+//TEST
+Route::post('/encuesta/{nombre}', 'QuizController@store')->name('guardarEncuesta');
+
 // GESTOR---------------------------------------------------------------
 Route::get('login', function () {
     return view('gestor.login');

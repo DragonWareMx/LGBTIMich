@@ -36,18 +36,40 @@
         @endphp
         @endforeach
     </ul>
-    <form action="" class="uk-width-1" method="POST">
+    <form action="{{route('guardarEncuesta',['nombre'=>$encuesta->name]) }}" class="uk-width-1" method="POST">
         @csrf
         <div class="enc_encuesta">
             @foreach ($encuesta->sections[0]->questions as $question)
             @switch($question->tipo)
 
             @case('abierta')
-            {{-- Pregunta tipo select --}}
-            <div class="uk-width-1-3@m uk-width-1 uk-margin-small-bottom uk-margin-small-top">
-                <div class="uk-width-1 uk-text-secondary uk-text-bold">1. {{$question->pregunta}}</div>
-                <input name="input1" class="uk-input uk-margin-small-top">
-            </div>
+                {{-- Pregunta tipo select --}}
+                <div class="uk-width-1-3@m uk-width-1 uk-margin-small-bottom uk-margin-small-top">
+                    <div class="uk-width-1 uk-text-secondary uk-text-bold">1. {{$question->pregunta}}</div>
+                    <input name="input[{{$question->id}}]" class="uk-input uk-margin-small-top" 
+                    @if ($question->options[0]->tipo == 'num')
+                        type="number"
+
+                        @if ($question->options[0]->max)
+                            max="{{$question->options[0]->max}}"
+                        @endif
+
+                        @if ($question->options[0]->min)
+                            min="{{$question->options[0]->min}}"
+                        @endif
+
+                    @elseif($question->options[0]->tipo == 'alfa')
+                        type="text"
+                        
+                        @if ($question->options[0]->max)
+                            maxlength="{{$question->options[0]->max}}"
+                        @endif
+
+                        @if ($question->options[0]->min)
+                            minlength="{{$question->options[0]->min}}"
+                        @endif
+                    @endif>
+                </div>
             @break
 
             @case('multiple')
@@ -110,23 +132,6 @@
 
             @endswitch
             @endforeach
-            {{-- Pregunta tipo select --}}
-            <div class="uk-width-1-3@m uk-width-1 uk-margin-small-bottom uk-margin-small-top">
-                <div class="uk-width-1 uk-text-secondary uk-text-bold">2. Municipio de residencia actual</div>
-                <select name="select2" class="uk-select uk-margin-small-top">
-                    <option value="Morelia">Morelia</option>
-                    <option value="Municiio">Municipio</option>
-                </select>
-            </div>
-            {{-- Pregunta tipo select --}}
-            <div class="uk-width-1-3@m uk-width-1 uk-margin-small-bottom uk-margin-small-top">
-                <div class="uk-width-1 uk-text-secondary uk-text-bold">3. Sexo asignado al nacer</div>
-                <select name="select3" class="uk-select uk-margin-small-top">
-                    <option value="Hombre">Hombre</option>
-                    <option value="Mujer">Mujer</option>
-                </select>
-            </div>
-        </div>
         <div class="uk-width-1 uk-margin-small-top uk-flex uk-flex-right uk-margin-bottom">
             <button type="submit" class="enc_submit">Guardar</button>
         </div>
