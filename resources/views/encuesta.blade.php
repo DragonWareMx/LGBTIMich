@@ -42,6 +42,7 @@
             @foreach ($encuesta->sections[0]->questions as $question)
             @switch($question->tipo)
 
+            {{-- YA QUEDÓ --}}
             @case('abierta')
                 {{-- Pregunta tipo select --}}
                 <div class="uk-width-1-3@m uk-width-1 uk-margin-small-bottom uk-margin-small-top">
@@ -50,28 +51,29 @@
                     @if ($question->options[0]->tipo == 'num')
                         type="number"
 
-                        @if ($question->options[0]->max)
-                            max="{{$question->options[0]->max}}"
+                        @if ($question->options[0]->maximo)
+                            max="{{$question->options[0]->maximo}}"
                         @endif
 
-                        @if ($question->options[0]->min)
-                            min="{{$question->options[0]->min}}"
+                        @if ($question->options[0]->minimo)
+                            min="{{$question->options[0]->minimo}}"
                         @endif
 
                     @elseif($question->options[0]->tipo == 'alfa')
                         type="text"
                         
-                        @if ($question->options[0]->max)
-                            maxlength="{{$question->options[0]->max}}"
+                        @if ($question->options[0]->maximo)
+                            maxlength="{{$question->options[0]->maximo}}"
                         @endif
 
-                        @if ($question->options[0]->min)
-                            minlength="{{$question->options[0]->min}}"
+                        @if ($question->options[0]->minimo)
+                            minlength="{{$question->options[0]->minimo}}"
                         @endif
                     @endif>
                 </div>
             @break
 
+            {{-- YA QUEDÓ --}}
             @case('multiple')
             {{-- Pregunta tipo radio --}}
             <div class="uk-width-1 uk-margin-small-bottom uk-margin-small-top">
@@ -79,20 +81,20 @@
                     solo una respuesta</div>
                 <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
                     @foreach ($question->options as $option)
-                        <label class="uk-width-1"><input class="uk-radio" type="radio" name="radio1">{{$option->opcion}}</label>
+                        <label class="uk-width-1"><input class="uk-radio" type="radio" name="radio[{{$question->id}}]" value="{{$option->id}}">{{$option->opcion}}</label>
                     @endforeach
                 </div>
             </div>
             @break
 
+            {{-- YA QUEDÓ --}}
             @case('select')
             {{-- Pregunta tipo select --}}
             <div class="uk-width-1-3@m uk-width-1 uk-margin-small-bottom uk-margin-small-top">
                 <div class="uk-width-1 uk-text-secondary uk-text-bold">1. {{$question->pregunta}}</div>
-                <select name="select1" class="uk-select uk-margin-small-top">
+                <select name="select[{{$question->id}}]" class="uk-select uk-margin-small-top">
                     @foreach ($question->options as $option)
                         <option value="" selected disabled hidden > Seleccionar </option>
-                    {{--///////////////////////////////////////////////// NO ESTOY SEGURO DE QUE EL VALUE DEBA SER EL ID ///////////////////////////////////////////////////// --}}
                         <option value="{{$option->id}}">{{$option->opcion}}</option>  
                     @endforeach
                 </select>
@@ -118,7 +120,7 @@
                             <tr>
                                 <td>{{$option->opcion}}</td>
                                 @foreach ($question->optionCols as $optionCol)
-                                <td><input class="uk-radio" type="radio" name="table{{$option->id}}"></td>
+                                <td><input class="uk-radio" type="radio" name="table[{{$question->id}}][{{$option->id}}]" value="{{$optionCol->id}}"></td>
                                 @endforeach
                             </tr>
                             @endforeach
