@@ -34,5 +34,27 @@ class OptionColSeeder extends Seeder
             'opcion' => 'Trató de convencerme de que no soy trans',
             'question_id'=>4
         ]);
+
+        //columnas de ps si
+        \DB::table('option_cols')->insert([
+            'opcion' => 'La neta no',
+            'question_id'=>8
+        ]);
+        \DB::table('option_cols')->insert([
+            'opcion' => 'Poquitillo nomas',
+            'question_id'=>8
+        ]);
+        \DB::table('option_cols')->insert([
+            'opcion' => 'a veces',
+            'question_id'=>8
+        ]);
+        \DB::table('option_cols')->insert([
+            'opcion' => 'si se rifa',
+            'question_id'=>8
+        ]);
+        \DB::table('option_cols')->insert([
+            'opcion' => 'anda rifadisimo',
+            'question_id'=>8
+        ]);
     }
 }

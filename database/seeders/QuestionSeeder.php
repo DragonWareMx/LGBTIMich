@@ -33,5 +33,27 @@ class QuestionSeeder extends Seeder
             'tipo' =>'tabla',
             'section_id'=>1
         ]);
+
+        //más pruebas jiji
+        \DB::table('questions')->insert([
+            'pregunta' => 'Esta pregunta es abierta por favor escribe lo que sea',
+            'tipo' =>'abierta',
+            'section_id'=>1
+        ]);
+        \DB::table('questions')->insert([
+            'pregunta' => 'esta pregunta es de radio y es de prueba',
+            'tipo' =>'multiple',
+            'section_id'=>1
+        ]);
+        \DB::table('questions')->insert([
+            'pregunta' => 'Pregunta tipo select ojo cuidado',
+            'tipo' =>'select',
+            'section_id'=>1
+        ]);
+        \DB::table('questions')->insert([
+            'pregunta' => 'esta es otra tablita vamos a ver',
+            'tipo' =>'tabla',
+            'section_id'=>1
+        ]);
     }
 }

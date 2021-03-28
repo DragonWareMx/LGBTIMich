@@ -13,6 +13,8 @@ class AnswererSeeder extends Seeder
      */
     public function run()
     {
-        //
+        \DB::table('answerers')->insert([
+            'id'=>1
+        ]);
     }
 }
