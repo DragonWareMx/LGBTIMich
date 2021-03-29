@@ -7,6 +7,7 @@ use App\Models\Quiz;
 use App\Models\Question;
 use App\Models\Answer;
 use App\Models\Option;
+use Illuminate\Support\Facades\DB;
 
 class QuizController extends Controller
 {
@@ -129,80 +130,86 @@ class QuizController extends Controller
 
         //-------------------------------------TEST-------------------------------------
 
-        dd('si sirve');
+        // dd('si sirve');
 
         //-------------------------------------TEST-------------------------------------
+        DB::beginTransaction();
+        try{
+            //se registran todas las preguntas de tipo input
+            if($data['input']){
+                $cont=0;
 
-        //se registran todas las preguntas de tipo input
-        if($data['input']){
-            $cont=0;
+                foreach($data['input'] as $input){
+                    $answer = new Answer();
+                    $answer->question_id=array_keys($data['input'])[$cont];  // Es una forma que se me ocurrió de obtener el valor izquierdo del arreglo de los inputs por eso está la variable cont para saber la posición del data[input] en el que van en el foreach
+                    $answer->answerer_id=1;  ////////////////////////////////////////////////CAMBIAR ANSWERER ID////////////////////////////////////////////////////////
+                    $option = Option::find(array_keys($input)[0]);
+                    $answer->option_id=$option->id;
+                    $answer->respuesta=$input[$option->id];
 
-            foreach($data['input'] as $input){
-                $answer = new Answer();
-
-                $answer->respuesta=$input;  // Se guarda la respuesta, o sea el valor derecho del input
-                $answer->question_id=array_keys($data['input'])[$cont];  // Es una forma que se me ocurrió de obtener el valor izquierdo del arreglo de los inputs por eso está la variable cont para saber la posición del data[input] en el que van en el foreach
-                $answer->answerer_id=1;  ////////////////////////////////////////////////CAMBIAR ANSWERER ID////////////////////////////////////////////////////////
-
-                $answer->save();
-                $cont++;
+                    $answer->save();
+                    $cont++;
+                }
             }
-        }
 
-        //se registran todas las preguntas de tipo radio
-        if($data['radio']){
-            $cont=0;
-            foreach($data['radio'] as $radio){
-                $answer= new Answer();
-
-                $answer->option_id=$radio; //Se guarda la relación con la opción seleccionada
-                $answer->question_id=array_keys($data['radio'])[$cont];
-                $answer->answerer_id=1;  ////////////////////////////////////////////////CAMBIAR ANSWERER ID////////////////////////////////////////////////////////
-                
-                $answer->save();
-                $cont++;
-            }
-        }
-
-        //se registran todas las preguntas de tipo select
-        if($data['select']){
-            $cont=0;
-            foreach($data['select'] as $select){
-                $answer= new Answer();
-
-                $answer->option_id=$select; //Se guarda la relación con la opción seleccionada
-                $answer->question_id=array_keys($data['select'])[$cont];
-                $answer->answerer_id=1;  ////////////////////////////////////////////////CAMBIAR ANSWERER ID////////////////////////////////////////////////////////
-                
-                $answer->save();
-                $cont++;
-            }
-        }
-
-        //se registran todas las preguntas de tipo table
-        if($data['table']){
-            $cont=0;
-            foreach($data['table'] as $table){
-                $aux=0;
-                foreach($table as $option){
+            //se registran todas las preguntas de tipo radio
+            if($data['radio']){
+                $cont=0;
+                foreach($data['radio'] as $radio){
                     $answer= new Answer();
 
-                    $answer->question_id=array_keys($data['table'])[$cont];
-                    $answer->option_col_id=$option;
-                    $answer->option_id=array_keys($table)[$aux];
+                    $answer->option_id=$radio; //Se guarda la relación con la opción seleccionada
+                    $answer->question_id=array_keys($data['radio'])[$cont];
                     $answer->answerer_id=1;  ////////////////////////////////////////////////CAMBIAR ANSWERER ID////////////////////////////////////////////////////////
                     
-                    $aux++;
                     $answer->save();
+                    $cont++;
                 }
-                $cont++;
             }
+
+            //se registran todas las preguntas de tipo select
+            if($data['select']){
+                $cont=0;
+                foreach($data['select'] as $select){
+                    $answer= new Answer();
+
+                    $answer->option_id=$select; //Se guarda la relación con la opción seleccionada
+                    $answer->question_id=array_keys($data['select'])[$cont];
+                    $answer->answerer_id=1;  ////////////////////////////////////////////////CAMBIAR ANSWERER ID////////////////////////////////////////////////////////
+                    
+                    $answer->save();
+                    $cont++;
+                }
+            }
+
+            //se registran todas las preguntas de tipo table
+            if($data['table']){
+                $cont=0;
+                foreach($data['table'] as $table){
+                    $aux=0;
+                    foreach($table as $option){
+                        $answer= new Answer();
+
+                        $answer->question_id=array_keys($data['table'])[$cont];
+                        $answer->option_col_id=$option;
+                        $answer->option_id=array_keys($table)[$aux];
+                        $answer->answerer_id=1;  ////////////////////////////////////////////////CAMBIAR ANSWERER ID////////////////////////////////////////////////////////
+                        
+                        $aux++;
+                        $answer->save();
+                    }
+                    $cont++;
+                }
+            }
+            DB::commit();
+            return response()->json(200);
         }
-
+        catch(\Exception $ex){
+            DB::rollBack();
+            return response()->json(['errors' => ['catch' => [0 => 'Ocurrió un error inesperado, intentalo más tarde.']]], 500);
+        }
         dd('éxito master');
-
         $encuesta = Quiz::where('name',$nombre)->firstOrFail();
-
         return view('encuesta', ['encuesta' => $encuesta]);
     }
 }
