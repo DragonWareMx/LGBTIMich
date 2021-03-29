@@ -62,7 +62,7 @@
                     <div class="uk-width-1 uk-text-secondary uk-text-bold">{{$contador}}. {{$question->pregunta}} @if (!$question->required)
                         (opcional)
                     @endif</div>
-                    <input name="input[{{$question->id}}]" class="uk-input uk-margin-small-top" 
+                    <input name="input[{{$question->id}}][{{$question->options[0]->id}}]" class="uk-input uk-margin-small-top" 
                     @if ($question->required)
                         required
                     @endif

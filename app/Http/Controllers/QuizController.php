@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Quiz;
 use App\Models\Question;
 use App\Models\Answer;
+use App\Models\Option;
 
 class QuizController extends Controller
 {
@@ -24,16 +25,60 @@ class QuizController extends Controller
                     $ids = array_keys($value);
 
                     foreach ($ids as $id) {
-                        $question = Question::find($id);
+                        try{
+                            //se busca la pregunta
+                            $question = Question::find($id);
+
+                            $option = Option::find(array_keys($value[$id])[0]);
+                        }
+                        catch(Throwable $e){
+                            return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> ocurrió un error al buscar en la db
+                        }
 
                         //valida que la pregunta exista
                         if(!$question)
                             return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> la pregunta no existe
                         
+                        //valida que la opcion exista
+                        if(!$option)
+                            return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> la opcion no existe
+
+                        //valida la relacion entre la pregunta y la opcion
+                        if(!($question->options->first() && $question->options->first()->id == $option->id))
+                            return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> la opcion no esta relacionada con la pregunta
+
+                            
+                        //valida que la pregunta sea abierta
+                        if($question->tipo != 'abierta')
+                            return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> la pregunta no es abierta
+                            
                         //en caso que la pregunta sea required se valida
                         if($question->required){
-                            if(!$value[$id])
-                                return $fail('Algo salió mal, vuelva a intentarlo.');  // -> la pregunta no existe
+                            if(!$value[$id][$option->id])
+                                return $fail('Algo salió mal, vuelva a intentarlo.');  // -> la pregunta es required y llegó nula
+                        }
+
+                        //si la pregunta es de tipo numérica se valida su longitud y si es numerica la respuesta
+                        if($option->tipo == 'num'){
+                            if(!($value[$id][$option->id] && is_numeric($value[$id][$option->id])))
+                                return $fail('Algo salió mal, vuelva a intentarlo.');  // -> la pregunta no es numerica cuado deberia serlo
+                            
+                            //si tiene minimos o maximos se verifican
+                            if($option->minimo && $value[$id][$option->id] && $value[$id][$option->id] < $option->minimo)
+                                return $fail('Algo salió mal, vuelva a intentarlo.');  // -> la pregunta no es numerica cuado deberia serlo
+                            if($option->maximo && $value[$id][$option->id] && $value[$id][$option->id] > $option->maximo)
+                                return $fail('Algo salió mal, vuelva a intentarlo.');  // -> la pregunta no es numerica cuado deberia serlo
+                        }
+                        else{
+                            //la pregunta es alfanumérica
+                            if (!($value[$id][$option->id] && preg_match("/^[\w\-0-9áéíóúÁÉÍÓÚ().,;: \"'ñÑ]*$/", $value[$id][$option->id])))
+                                return $fail('Algo salió mal, vuelva a intentarlo.');  // -> la pregunta no es numerica cuado deberia serlo
+                            
+                            //si tiene minimos o maximos se verifican
+                            if($option->minimo && $value[$id][$option->id] && strlen($value[$id][$option->id]) < $option->minimo)
+                                return $fail('Algo salió mal, vuelva a intentarlo.');  // -> la pregunta no es numerica cuado deberia serlo
+                            if($option->maximo && $value[$id][$option->id] && strlen($value[$id][$option->id]) > $option->maximo)
+                                return $fail('Algo salió mal, vuelva a intentarlo.');  // -> la pregunta no es numerica cuado deberia serlo
                         }
                     }
                 }
@@ -81,6 +126,12 @@ class QuizController extends Controller
                 }
             ],
         ]);
+
+        //-------------------------------------TEST-------------------------------------
+
+        dd('si sirve');
+
+        //-------------------------------------TEST-------------------------------------
 
         //se registran todas las preguntas de tipo input
         if($data['input']){
