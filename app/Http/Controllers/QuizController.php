@@ -18,6 +18,11 @@ class QuizController extends Controller
     }
 
     public function store($nombre){
+        //-------------------------------------TEST-------------------------------------
+
+        //dd(request());
+
+        //-------------------------------------TEST-------------------------------------
         $data = request()->validate([
             'input' => [
                 'array',
@@ -91,10 +96,38 @@ class QuizController extends Controller
                     $ids = array_keys($value);
 
                     foreach ($ids as $id) {
-                        $question = Question::find($id);
+                        try{
+                            //se busca la pregunta
+                            $question = Question::find($id);
 
+                            $option = Option::find($value[$id]);
+                        }
+                        catch(Throwable $e){
+                            return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> ocurrió un error al buscar en la db
+                        }
+
+                        //valida que la pregunta exista
                         if(!$question)
-                            return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> "quantity is invalid"
+                            return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> la pregunta no existe
+                        
+                        //valida que la opcion exista
+                        if(!$option)
+                            return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> la opcion no existe
+
+                        //valida la relacion entre la pregunta y la opcion
+                        if(!($question->options->first() && $question->options->first()->id == $option->id))
+                            return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> la opcion no esta relacionada con la pregunta
+
+                            
+                        //valida que la pregunta sea abierta
+                        if($question->tipo != 'multiple')
+                            return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> la pregunta no es abierta
+                            
+                        //en caso que la pregunta sea required se valida
+                        if($question->required){
+                            if(!$value[$id])
+                                return $fail('Algo salió mal, vuelva a intentarlo.');  // -> la pregunta es required y llegó nula
+                        }
                     }
                 }
             ],
@@ -105,10 +138,38 @@ class QuizController extends Controller
                     $ids = array_keys($value);
 
                     foreach ($ids as $id) {
-                        $question = Question::find($id);
+                        try{
+                            //se busca la pregunta
+                            $question = Question::find($id);
 
+                            $option = Option::find($value[$id]);
+                        }
+                        catch(Throwable $e){
+                            return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> ocurrió un error al buscar en la db
+                        }
+
+                        //valida que la pregunta exista
                         if(!$question)
-                            return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> "quantity is invalid"
+                            return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> la pregunta no existe
+                        
+                        //valida que la opcion exista
+                        if(!$option)
+                            return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> la opcion no existe
+
+                        //valida la relacion entre la pregunta y la opcion
+                        if(!($question->options->first() && $question->options->first()->id == $option->id))
+                            return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> la opcion no esta relacionada con la pregunta
+
+                            
+                        //valida que la pregunta sea abierta
+                        if($question->tipo != 'select')
+                            return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> la pregunta no es abierta
+                            
+                        //en caso que la pregunta sea required se valida
+                        if($question->required){
+                            if(!$value[$id])
+                                return $fail('Algo salió mal, vuelva a intentarlo.');  // -> la pregunta es required y llegó nula
+                        }
                     }
                 }
             ],
@@ -119,10 +180,57 @@ class QuizController extends Controller
                     $ids = array_keys($value);
 
                     foreach ($ids as $id) {
-                        $question = Question::find($id);
+                        try{
+                            //se busca la pregunta
+                            $question = Question::find($id);
 
+                            $options = Option::whereIn('id',array_keys($value[$id]))->get();
+
+                            $optionCols = OptionCol::Where('question_id',$question->id);
+                        }
+                        catch(Throwable $e){
+                            return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> ocurrió un error al buscar en la db
+                        }
+
+                        //valida que la cantidad de opciones encontradas sean las mismas que las enviadas
+                        if(count($options) == array_keys($value[$id]))
+                            return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> ocurrió un error al buscar en la db
+                        
+                        //obtenemos todos los ids de las option cols
+                        foreach ($options as $option) {
+                            dd(($value[$id]));
+                            //$optionCols = OptionCol::
+                            dd(($value[$id]));
+                        }
+
+                        //buscamos los option cols
+
+                        //valida que los ids ingresados formen parte de los option cols
+
+                        //valida que los option cols sean parte de la pregunta
+
+                        //valida que la pregunta exista
                         if(!$question)
-                            return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> "quantity is invalid"
+                            return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> la pregunta no existe
+                        
+                        //valida que la opcion exista
+                        if(!$option)
+                            return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> la opcion no existe
+
+                        //valida la relacion entre la pregunta y la opcion
+                        if(!($question->options->first() && $question->options->first()->id == $option->id))
+                            return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> la opcion no esta relacionada con la pregunta
+
+                            
+                        //valida que la pregunta sea abierta
+                        if($question->tipo != 'tabla')
+                            return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> la pregunta no es abierta
+                            
+                        //en caso que la pregunta sea required se valida
+                        if($question->required){
+                            if(!$value[$id][$option->id])
+                                return $fail('Algo salió mal, vuelva a intentarlo.');  // -> la pregunta es required y llegó nula
+                        }
                     }
                 }
             ],
