@@ -7,6 +7,7 @@ use App\Models\Quiz;
 use App\Models\Question;
 use App\Models\Answer;
 use App\Models\Option;
+use App\Models\OptionCol;
 use Illuminate\Support\Facades\DB;
 
 class QuizController extends Controller
@@ -186,50 +187,60 @@ class QuizController extends Controller
 
                             $options = Option::whereIn('id',array_keys($value[$id]))->get();
 
-                            $optionCols = OptionCol::Where('question_id',$question->id);
+                            $optionCols = OptionCol::Where('question_id',$question->id)->get();
                         }
                         catch(Throwable $e){
                             return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> ocurrió un error al buscar en la db
                         }
 
-                        //valida que la cantidad de opciones encontradas sean las mismas que las enviadas
-                        if(count($options) == array_keys($value[$id]))
-                            return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> ocurrió un error al buscar en la db
                         
-                        //obtenemos todos los ids de las option cols
-                        foreach ($options as $option) {
-                            dd(($value[$id]));
-                            //$optionCols = OptionCol::
-                            dd(($value[$id]));
-                        }
-
-                        //buscamos los option cols
-
-                        //valida que los ids ingresados formen parte de los option cols
-
-                        //valida que los option cols sean parte de la pregunta
-
                         //valida que la pregunta exista
                         if(!$question)
-                            return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> la pregunta no existe
+                        return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> la pregunta no existe
                         
-                        //valida que la opcion exista
-                        if(!$option)
-                            return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> la opcion no existe
-
-                        //valida la relacion entre la pregunta y la opcion
-                        if(!($question->options->first() && $question->options->first()->id == $option->id))
-                            return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> la opcion no esta relacionada con la pregunta
-
-                            
-                        //valida que la pregunta sea abierta
+                        
+                        //valida que la pregunta sea tabla
                         if($question->tipo != 'tabla')
-                            return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> la pregunta no es abierta
-                            
+                        return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> la pregunta no es abierta
+                        
                         //en caso que la pregunta sea required se valida
                         if($question->required){
                             if(!$value[$id][$option->id])
-                                return $fail('Algo salió mal, vuelva a intentarlo.');  // -> la pregunta es required y llegó nula
+                            return $fail('Algo salió mal, vuelva a intentarlo.');  // -> la pregunta es required y llegó nula
+                        }
+
+                        //valida que la cantidad de opciones encontradas sean las mismas que las enviadas
+                        if(count($options) == count(array_keys($value[$id])))
+                            return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> ocurrió un error al buscar en la db
+        
+                        //valida que las opciones esten relacionadas con la pregunta
+                        $validacion = false;
+                        foreach ($options as $option) {
+                            foreach ($question->options as $qOption) {
+                                if($qOption->id == $option->id){
+                                    $validacion = true;
+                                    break;
+                                }
+                            }
+                            if(!$validacion)
+                                return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> ocurrió un error al buscar en la db
+                            
+                            $validacion = false;
+                        }
+                        
+                        //valida que los ids ingresados formen parte de los option cols
+                        $validacion = false;
+                        foreach ($options as $option) {
+                            foreach ($optionCols as $optionCol) {
+                                if($optionCol->id == $value[$id][$option->id]){
+                                    $validacion = true;
+                                    break;
+                                }
+                            }
+                            if(!$validacion)
+                                return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> ocurrió un error al buscar en la db
+                            
+                            $validacion = false;
                         }
                     }
                 }
