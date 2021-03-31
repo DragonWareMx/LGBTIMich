@@ -19,11 +19,6 @@ class QuizController extends Controller
     }
 
     public function store($nombre){
-        //-------------------------------------TEST-------------------------------------
-
-        //dd(request());
-
-        //-------------------------------------TEST-------------------------------------
         $data = request()->validate([
             'input' => [
                 'array',
@@ -67,7 +62,7 @@ class QuizController extends Controller
 
                         //si la pregunta es de tipo numérica se valida su longitud y si es numerica la respuesta
                         if($option->tipo == 'num'){
-                            if(!($value[$id][$option->id] && is_numeric($value[$id][$option->id])))
+                            if($value[$id][$option->id] && !is_numeric($value[$id][$option->id]))
                                 return $fail('Algo salió mal, vuelva a intentarlo.');  // -> la pregunta no es numerica cuado deberia serlo
                             
                             //si tiene minimos o maximos se verifican
@@ -78,7 +73,7 @@ class QuizController extends Controller
                         }
                         else{
                             //la pregunta es alfanumérica
-                            if (!($value[$id][$option->id] && preg_match("/^[\w\-0-9áéíóúÁÉÍÓÚ().,;: \"'ñÑ]*$/", $value[$id][$option->id])))
+                            if ($value[$id][$option->id] && !preg_match("/^[\w\-0-9áéíóúÁÉÍÓÚ().,;: \"'ñÑ]*$/", $value[$id][$option->id]))
                                 return $fail('Algo salió mal, vuelva a intentarlo.');  // -> la pregunta no es numerica cuado deberia serlo
                             
                             //si tiene minimos o maximos se verifican
@@ -101,7 +96,7 @@ class QuizController extends Controller
                             //se busca la pregunta
                             $question = Question::find($id);
 
-                            $option = Option::find($value[$id]);
+                            $options = $question->options;
                         }
                         catch(Throwable $e){
                             return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> ocurrió un error al buscar en la db
@@ -110,25 +105,32 @@ class QuizController extends Controller
                         //valida que la pregunta exista
                         if(!$question)
                             return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> la pregunta no existe
-                        
-                        //valida que la opcion exista
-                        if(!$option)
-                            return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> la opcion no existe
-
-                        //valida la relacion entre la pregunta y la opcion
-                        if(!($question->options->first() && $question->options->first()->id == $option->id))
-                            return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> la opcion no esta relacionada con la pregunta
-
                             
-                        //valida que la pregunta sea abierta
+                        //valida que la pregunta sea multiple
                         if($question->tipo != 'multiple')
-                            return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> la pregunta no es abierta
+                            return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> la pregunta no es multiple
                             
                         //en caso que la pregunta sea required se valida
                         if($question->required){
                             if(!$value[$id])
                                 return $fail('Algo salió mal, vuelva a intentarlo.');  // -> la pregunta es required y llegó nula
                         }
+
+                        //valida que la pregunta tenga al menos una opcion disponible
+                        if(count($question->options) < 1){
+                            return $fail('Algo salió mal, vuelva a intentarlo.');  // -> la pregunta no tiene opciones
+                        }
+
+                        //valida que la respuesta coincida con alguna opcion
+                        $validacion = false;
+                        foreach ($options as $option) {
+                            if($option->id == $value[$id]){
+                                $validacion = true;
+                                break;
+                            }
+                        }
+                        if(!$validacion)
+                            return $fail('Algo salió mal, vuelva a intentarlo.');  // -> la respuesta no existe
                     }
                 }
             ],
@@ -143,7 +145,7 @@ class QuizController extends Controller
                             //se busca la pregunta
                             $question = Question::find($id);
 
-                            $option = Option::find($value[$id]);
+                            $options = $question->options;
                         }
                         catch(Throwable $e){
                             return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> ocurrió un error al buscar en la db
@@ -152,25 +154,32 @@ class QuizController extends Controller
                         //valida que la pregunta exista
                         if(!$question)
                             return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> la pregunta no existe
-                        
-                        //valida que la opcion exista
-                        if(!$option)
-                            return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> la opcion no existe
-
-                        //valida la relacion entre la pregunta y la opcion
-                        if(!($question->options->first() && $question->options->first()->id == $option->id))
-                            return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> la opcion no esta relacionada con la pregunta
-
                             
-                        //valida que la pregunta sea abierta
+                        //valida que la pregunta sea select
                         if($question->tipo != 'select')
-                            return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> la pregunta no es abierta
+                            return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> la pregunta no es select
                             
                         //en caso que la pregunta sea required se valida
                         if($question->required){
                             if(!$value[$id])
                                 return $fail('Algo salió mal, vuelva a intentarlo.');  // -> la pregunta es required y llegó nula
                         }
+
+                        //valida que la pregunta tenga al menos una opcion disponible
+                        if(count($question->options) < 1){
+                            return $fail('Algo salió mal, vuelva a intentarlo.');  // -> la pregunta no tiene opciones
+                        }
+
+                        //valida que la respuesta coincida con alguna opcion
+                        $validacion = false;
+                        foreach ($options as $option) {
+                            if($option->id == $value[$id]){
+                                $validacion = true;
+                                break;
+                            }
+                        }
+                        if(!$validacion)
+                            return $fail('Algo salió mal, vuelva a intentarlo.');  // -> la respuesta no existe
                     }
                 }
             ],
@@ -185,7 +194,7 @@ class QuizController extends Controller
                             //se busca la pregunta
                             $question = Question::find($id);
 
-                            $options = Option::whereIn('id',array_keys($value[$id]))->get();
+                            $options = $question->options;
 
                             $optionCols = OptionCol::Where('question_id',$question->id)->get();
                         }
@@ -196,41 +205,23 @@ class QuizController extends Controller
                         
                         //valida que la pregunta exista
                         if(!$question)
-                        return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> la pregunta no existe
-                        
+                            return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> la pregunta no existe
                         
                         //valida que la pregunta sea tabla
                         if($question->tipo != 'tabla')
-                        return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> la pregunta no es abierta
-                        
+                            return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> la pregunta no es tabla
+
                         //en caso que la pregunta sea required se valida
                         if($question->required){
-                            if(!$value[$id][$option->id])
-                            return $fail('Algo salió mal, vuelva a intentarlo.');  // -> la pregunta es required y llegó nula
-                        }
-
-                        //valida que la cantidad de opciones encontradas sean las mismas que las enviadas
-                        if(count($options) == count(array_keys($value[$id])))
-                            return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> ocurrió un error al buscar en la db
-        
-                        //valida que las opciones esten relacionadas con la pregunta
-                        $validacion = false;
-                        foreach ($options as $option) {
-                            foreach ($question->options as $qOption) {
-                                if($qOption->id == $option->id){
-                                    $validacion = true;
-                                    break;
-                                }
-                            }
-                            if(!$validacion)
+                            //valida que la cantidad de opciones encontradas sean las mismas que las enviadas
+                            if(count($options) > 0 && count($options) != count($value[$id]))
                                 return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> ocurrió un error al buscar en la db
-                            
-                            $validacion = false;
                         }
                         
-                        //valida que los ids ingresados formen parte de los option cols
                         $validacion = false;
                         foreach ($options as $option) {
+
+                            //valida que los ids ingresados formen parte de los option cols
                             foreach ($optionCols as $optionCol) {
                                 if($optionCol->id == $value[$id][$option->id]){
                                     $validacion = true;
@@ -238,20 +229,26 @@ class QuizController extends Controller
                                 }
                             }
                             if(!$validacion)
-                                return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> ocurrió un error al buscar en la db
+                                return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> la respuesta no existe
                             
                             $validacion = false;
+
+                            //valida que la opcion exista
+                            $keys = array_keys($value[$id]);
+                            foreach ($keys as $aOption) {
+                                if ($option->id == $aOption) {
+                                    $validacion = true;
+                                    break;
+                                }
+                            }
+                            if(!$validacion)
+                                return $fail('Ha ocurrido un error, vuelva a intentarlo más tarde.');  // -> la opcion no existe
                         }
                     }
                 }
             ],
         ]);
 
-        //-------------------------------------TEST-------------------------------------
-
-        // dd('si sirve');
-
-        //-------------------------------------TEST-------------------------------------
         DB::beginTransaction();
         try{
             //se registran todas las preguntas de tipo input
